@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    form {
+      max-width: 500px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin: auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Submit Form</h1>
+  <form id="submitForm">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+    </div>
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" required />
+    </div>
+    <div class="form-group">
+      <label for="file">Upload File:</label>
+      <input type="file" id="file" name="file" required />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById("submitForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      // Get form data
+      const formData = new FormData();
+      formData.append("name", document.getElementById("name").value);
+      formData.append("age", document.getElementById("age").value);
+      formData.append("file", document.getElementById("file").files[0]);
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/submit", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert("Form submitted successfully! \n" + JSON.stringify(result));
+        } else {
+          alert("Error: " + JSON.stringify(result));
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("An error occurred while submitting the form.");
+      }
+    });
+  </script>
+</body>
+</html>
